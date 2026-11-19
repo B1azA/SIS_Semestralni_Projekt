@@ -7,8 +7,15 @@ from src.math_core import verify_equivalence, compute
 from src.curriculum import CURRICULUM
 from src.rag import load_retriever, format_context
 
-# Načte OPENAI_API_KEY ze souboru .env v kořenové složce
+# Načte OPENAI_API_KEY ze souboru .env v kořenové složce (lokální spuštění)
 load_dotenv()
+
+# Pro nasazené aplikace (např. Streamlit Community Cloud) se klíč bere ze st.secrets.
+try:
+    if "OPENAI_API_KEY" in st.secrets:
+        os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+except Exception:
+    pass
 
 st.set_page_config(page_title="AI Tutor Matematické analýzy – FSI VUT", page_icon="∫", layout="wide")
 

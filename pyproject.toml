@@ -22,9 +22,10 @@ dependencies = [
     "sympy>=1.14.0",
 ]
 
-[project.scripts]
-semestralka = "semestralka:main"
-
 [build-system]
 requires = ["uv_build>=0.13.6,<0.14.0"]
 build-backend = "uv_build"
+
+# Projekt je aplikace (ne knihovna), takže ho není potřeba sestavovat jako balíček.
+[tool.uv]
+package = false

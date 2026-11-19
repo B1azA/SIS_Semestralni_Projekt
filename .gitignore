@@ -12,9 +12,11 @@ wheels/
 # Secrets (API keys) - nikdy necommituj!
 .env
 
-# Vygenerovaná data / vektorová DB
+# Vygenerovaná data (PDF ponecháme mimo repo, vektorovou DB naopak přidáváme)
 data/raw/
-data/db/
+
+# uv.lock ponecháváme mimo repo – Streamlit Cloud kvůli priority použije requirements.txt
+uv.lock
 
 # Jupyter / Streamlit
 .ipynb_checkpoints/
