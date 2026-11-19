@@ -223,9 +223,12 @@ Testování s reálnými studenty (průběžně doplňováno):
 **Václav Šícha:**
 > „Model plní svojí funkci. Umí celkem dobře vysvětlit učivo. Nepodařilo se mi ho rozbít.“
 
-Shrnutí: student potvrdil, že aplikace plní svůj účel a výklad látky je srozumitelný. Zároveň se
-mu nepodařilo najít vstup, na kterém by model selhal, což podporuje odolnost nastavených promptů
-a ověřování výpočtů přes SymPy.
+**Štěpán Rada:**
+> „Velice hezké a užitečné, sám bych to využíval na denní bázi.“
+
+Shrnutí: oba studenti hodnotili aplikaci kladně. Václav potvrdil funkčnost i srozumitelnost výkladu
+a nepodařilo se mu najít vstup, na kterém by model selhal; Štěpán ocenil užitečnost aplikace
+natolik, že by ji používal pravidelně.
 
 ---
 
