@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import inspect
 import streamlit as st
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -137,7 +138,9 @@ tools = [
             "name": "compute",
             "description": (
                 "Přímo spočítá symbolický výsledek pomocí SymPy (nikdy nepočítej zpaměti). "
-                "Použij pro derivaci, integrál, limitu, zjednodušení, rozvinutí, faktorizaci nebo řešení rovnice."
+                "Použij pro derivaci, integrál, limitu, zjednodušení, rozvinutí, faktorizaci nebo řešení rovnice. "
+                "U integrálu: bez 'lower'/'upper' vrátí neurčitý integrál (primitivní funkci), "
+                "s oběma mezemi vrátí určitý integrál."
             ),
             "parameters": {
                 "type": "object",
@@ -149,7 +152,9 @@ tools = [
                         "description": "Požadovaná operace."
                     },
                     "variable": {"type": "string", "description": "Proměnná výpočtu, výchozí 'x'"},
-                    "point": {"type": "string", "description": "Bod pro limitu (např. '0', '2', 'oo', '-oo'). Povinné jen pro operation='limit'."}
+                    "point": {"type": "string", "description": "Bod pro limitu (např. '0', '2', 'oo', '-oo'). Povinné jen pro operation='limit'."},
+                    "lower": {"type": "number", "description": "Dolní mez pro určitý integrál (jen operation='integrate'). Nepovinné."},
+                    "upper": {"type": "number", "description": "Horní mez pro určitý integrál (jen operation='integrate'). Nepovinné."}
                 },
                 "required": ["expr", "operation"]
             }
@@ -329,17 +334,26 @@ if prompt := st.chat_input("Napiš dotaz k teorii, požádej o příklad nebo za
                 api_messages.append(msg)
                 for tool_call in msg.tool_calls:
                     name = tool_call.function.name
-                    args = json.loads(tool_call.function.arguments)
-                    if name == "plot_function":
-                        fig, res_dict = render_plot(**args)
-                        if fig is not None:
-                            figures.append(fig)
-                    else:
-                        func = AVAILABLE_FUNCTIONS.get(name)
-                        if func is None:
-                            res_dict = {"error": f"Neznámý nástroj '{name}'."}
+                    # Argumenty chráníme: model může poslat neplatný JSON nebo špatné názvy parametrů.
+                    try:
+                        args = json.loads(tool_call.function.arguments or "{}")
+                    except Exception:
+                        args = {}
+                    try:
+                        if name == "plot_function":
+                            allowed = inspect.signature(render_plot).parameters
+                            fig, res_dict = render_plot(**{k: v for k, v in args.items() if k in allowed})
+                            if fig is not None:
+                                figures.append(fig)
                         else:
-                            res_dict = func(**args)
+                            func = AVAILABLE_FUNCTIONS.get(name)
+                            if func is None:
+                                res_dict = {"error": f"Neznámý nástroj '{name}'."}
+                            else:
+                                allowed = inspect.signature(func).parameters
+                                res_dict = func(**{k: v for k, v in args.items() if k in allowed})
+                    except Exception as exc:  # noqa: BLE001 – ať chyba nástroje nikdy neshodí aplikaci
+                        res_dict = {"error": f"Nástroj '{name}' selhal: {exc}"}
                     verification_logs.append({"nastroj": name, "vstup": args, "vysledek_sympy": res_dict})
                     api_messages.append({
                         "role": "tool",

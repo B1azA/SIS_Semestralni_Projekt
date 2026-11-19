@@ -53,7 +53,8 @@ def _parse_point(point) -> sp.Expr:
     return sp.sympify(point)
 
 
-def compute(expr: str, operation: str, variable: str = "x", point=None) -> dict:
+def compute(expr: str, operation: str, variable: str = "x", point=None,
+            lower=None, upper=None) -> dict:
     """Přímo spočítá požadovanou operaci nad výrazem pomocí SymPy.
 
     Args:
@@ -62,6 +63,9 @@ def compute(expr: str, operation: str, variable: str = "x", point=None) -> dict:
             ``limit``, ``expand``, ``factor`` nebo ``solve`` (lze i česky).
         variable: proměnná výpočtu (výchozí ``"x"``).
         point: bod pro ``limit`` (např. ``0``, ``"oo"``, ``"-oo"``).
+        lower, upper: meze pro **určitý** integrál. Když jsou obě zadány, spočítá se
+            určitý integrál ``∫_lower^upper``; jinak se (u ``integrate``) vrací
+            **neurčitý** integrál (primitivní funkce).
 
     Returns:
         dict s ``result`` (textově), ``latex`` a ``operation``;
@@ -81,7 +85,10 @@ def compute(expr: str, operation: str, variable: str = "x", point=None) -> dict:
         elif op == "derivative2":
             res = sp.diff(e, x, 2)
         elif op == "integrate":
-            res = sp.integrate(e, x)
+            if lower is not None and upper is not None:
+                res = sp.integrate(e, (x, _parse_point(lower), _parse_point(upper)))
+            else:
+                res = sp.integrate(e, x)  # neurčitý integrál (beze změny)
         elif op == "expand":
             res = sp.expand(e)
         elif op == "factor":

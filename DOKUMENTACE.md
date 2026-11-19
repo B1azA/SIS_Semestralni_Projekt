@@ -110,8 +110,10 @@ Model má k dispozici **tři nástroje**:
 - `verify_equivalence(student_expr, expected_expr, variable)` (`src/math_core.py`) – ověří, zda
   jsou dva výrazy algebraicky ekvivalentní (rozdíl se zjednoduší na nulu). Používá se
   k vyhodnocení odpovědi studenta.
-- `compute(expr, operation, variable, point)` (`src/math_core.py`) – **přímo spočítá** výsledek:
-  derivaci (i druhou), integrál, limitu, zjednodušení, rozvinutí, faktorizaci nebo řešení rovnice.
+- `compute(expr, operation, variable, point, lower, upper)` (`src/math_core.py`) – **přímo spočítá**
+  výsledek: derivaci (i druhou), integrál, limitu, zjednodušení, rozvinutí, faktorizaci nebo
+  řešení rovnice. U `integrate` bez `lower`/`upper` vrací **neurčitý** integrál (primitivní funkci),
+  s oběma mezemi **určitý** integrál.
 - `plot_function(exprs, variable, x_min, x_max, area_from, area_to, area_index)` (`src/plotting.py`)
   – vykreslí **jednu i více funkcí do jednoho grafu** (Plotly), u určitého integrálu **vybarví
   plochu pod křivkou** (křivku určí `area_index`) a vždy **zvýrazní osy x = 0 a y = 0**.
@@ -120,6 +122,10 @@ Modul `src/plotting.py` je navržen robustně i pro „bláznivé“ funkce: hus
 `lambdify`, **percentilový rozsah osy y** (pól neroztáhne měřítko), **přerušení křivky** v místech
 skoků (asymptoty se nespojí čarou) a ošetření nedefinovaného oboru (bere se jen reálná část).
 Nástroj navíc vrací modelu **číselný souhrn** (obor, min/max, plocha), aby mohl graf okomentovat.
+
+Volání nástrojů jsou **odolná**: argumenty se filtrují podle signatury funkce a každé volání je
+obaleno `try/except`, takže ani neplatné argumenty od modelu neshodí aplikaci – vrátí se chybová
+zpráva a model může volat znovu.
 
 Volání probíhají ve **smyčce** (`MAX_TOOL_ROUNDS = 5`): konverzace se pošle modelu s definicemi
 nástrojů, orchestrační vrstva volání vykoná lokálně přes SymPy (podle názvu funkce přes
