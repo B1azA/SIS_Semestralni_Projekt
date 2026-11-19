@@ -126,3 +126,47 @@ Když třeba jedeš autem, tak rychlost, kterou jedeš, je derivace tvé vzdále
 Matematicky to vyjadřujeme jako limitu, která ukazuje, co se děje, když se blížíme k tomuto bodu. Takže derivace vlastně ukazuje, jak moc se funkce "hýbe" při malých změnách kolem daného bodu. Super, že?
 
 > 📚 *Použité pasáže z přednášek (RAG):* ### 14 Derivace, ##### Pˇrehled vzorc˚u pro derivaci
+
+---
+
+## 4. Vykreslování grafů (určitý integrál)
+
+**Nastavení:** režim *Učitel*, kapitola *4. Integrální počet funkce jedné proměnné*.
+
+**🧑‍🎓 Student:** Vypočítej určitý integrál funkce x^2 od 0 do 2 a ukaž mi plochu pod křivkou.
+
+**🤖 Tutor:**
+
+Určitý integrál funkce $f(x) = x^2$ od $0$ do $2$ vypočítáme takto:
+
+$$
+\int_0^2 x^2 \, dx = \left[ \frac{x^3}{3} \right]_0^2.
+$$
+
+Nejprve spočítáme hodnotu:
+
+1. Dosadíme horní mez $2$:
+   $$ \frac{2^3}{3} = \frac{8}{3}. $$
+
+2. Dosadíme dolní mez $0$:
+   $$ \frac{0^3}{3} = 0. $$
+
+3. Odečteme výsledky:
+   $$ \frac{8}{3} - 0 = \frac{8}{3}. $$
+
+Tedy, výsledek určitého integrálu je $\frac{8}{3}$.
+
+Podívejme se nyní na plochu pod křivkou $y = x^2$ mezi $0$ a $2$:
+
+- Oblast pod křivkou je vyznačena na grafu níže.
+
+ 
+
+### Časté chyby:
+1. **Zapomenutí na meze integrace:** Někteří studenti nezapíší dolní a horní mez, což vede k chybě.
+2. **Chybně provedená substituce:** Při výpočtu antiderivace je důležité být pečlivý, zejména na koeficienty.
+3. **Opomenutí odečítání mezi mezemi:** Učinit toto odčítání správně je klíčové pro získání správného výsledku.
+
+> 📈 V aplikaci se pod odpovědí **vykreslí interaktivní graf** funkce $y=x^2$ s oranžově
+> vybarvenou plochou mezi $0$ a $2$ (nástroj `plot_function` s `area_from=0`, `area_to=2`).
+> Nástroj zároveň spočítal plochu ≈ **2,6667** (= 8/3), což odpovídá výsledku.

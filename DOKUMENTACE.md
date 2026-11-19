@@ -33,6 +33,7 @@ přes webové rozhraní.
 | Uživatelské rozhraní | Streamlit (Python) |
 | Jazykový model | OpenAI GPT‑4o‑mini (`openai`) |
 | Matematická verifikace | SymPy (`sympy`) |
+| Vykreslování grafů | Plotly + NumPy (`plotly`, `numpy`) |
 | Znalostní báze / RAG | ChromaDB (`chromadb`) + OpenAI embeddingy `text-embedding-3-small` |
 | Zpracování PDF | `pymupdf4llm` (PDF → Markdown) |
 | Konfigurace | `python-dotenv` (`.env`) |
@@ -103,15 +104,21 @@ vychází. Pokud index neexistuje, aplikace funguje dál (jen bez RAG) a zobraz�
 > RAG jsme zvolili proto, že je levnější, okamžitě reflektuje změny ve skriptech a umožňuje
 > u odpovědí citovat zdroj.
 
-### 2.4 Napojení matematického jádra (SymPy)
-Model má k dispozici **dva nástroje** ze `src/math_core.py`:
+### 2.4 Napojení matematického jádra (SymPy) a vykreslování
+Model má k dispozici **tři nástroje**:
 
-- `verify_equivalence(student_expr, expected_expr, variable)` – ověří, zda jsou dva výrazy
-  algebraicky ekvivalentní (rozdíl se zjednoduší na nulu). Používá se k vyhodnocení odpovědi
-  studenta.
-- `compute(expr, operation, variable, point)` – **přímo spočítá** výsledek: derivaci
-  (i druhou), integrál, limitu, zjednodušení, rozvinutí, faktorizaci nebo řešení rovnice.
-  Používá se jak pro referenční výsledky generovaných příkladů, tak pro výpočty ve výkladu.
+- `verify_equivalence(student_expr, expected_expr, variable)` (`src/math_core.py`) – ověří, zda
+  jsou dva výrazy algebraicky ekvivalentní (rozdíl se zjednoduší na nulu). Používá se
+  k vyhodnocení odpovědi studenta.
+- `compute(expr, operation, variable, point)` (`src/math_core.py`) – **přímo spočítá** výsledek:
+  derivaci (i druhou), integrál, limitu, zjednodušení, rozvinutí, faktorizaci nebo řešení rovnice.
+- `plot_function(expr, variable, x_min, x_max, area_from, area_to)` (`src/plotting.py`) – vykreslí
+  **graf funkce** (Plotly) a u určitého integrálu **vybarví plochu pod křivkou**.
+
+Modul `src/plotting.py` je navržen robustně i pro „bláznivé“ funkce: husté vzorkování přes
+`lambdify`, **percentilový rozsah osy y** (pól neroztáhne měřítko), **přerušení křivky** v místech
+skoků (asymptoty se nespojí čarou) a ošetření nedefinovaného oboru (bere se jen reálná část).
+Nástroj navíc vrací modelu **číselný souhrn** (obor, min/max, plocha), aby mohl graf okomentovat.
 
 Volání probíhají ve **smyčce** (`MAX_TOOL_ROUNDS = 5`): konverzace se pošle modelu s definicemi
 nástrojů, orchestrační vrstva volání vykoná lokálně přes SymPy (podle názvu funkce přes
@@ -157,7 +164,8 @@ Streamlit aplikace (`app.py`) nabízí:
 - chat s historií,
 - postranní panel: volba režimu, kapitoly a obtížnosti + tlačítko nové konverzace,
 - automatické vykreslování matematiky (Streamlit renderuje LaTeX v Markdownu),
-- panely se **zdroji z RAG** a s **protokolem ze SymPy**.
+- panely se **zdroji z RAG** a s **protokolem ze SymPy**,
+- **interaktivní grafy funkcí** (Plotly) vykreslené pod odpovědí, např. plocha pod křivkou u integrálu.
 
 ---
 
@@ -196,6 +204,8 @@ Obsahují:
   **správného** řešení nástrojem `verify_equivalence`.
 - **Režim Spolužák** – neformální, stručné vysvětlení derivace postavené na přirovnání
   (rychlost auta jako derivace vzdálenosti podle času).
+- **Vykreslování grafů** – výpočet určitého integrálu $\int_0^2 x^2\,dx$ s vykreslením plochy
+  pod křivkou (nástroj `plot_function`).
 
 ### 3.4 Zpětná vazba od studentů
 Testování s reálnými studenty (průběžně doplňováno):

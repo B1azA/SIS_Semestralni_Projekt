@@ -19,6 +19,8 @@ přednášky pomocí **RAG** (vyhledávání v přednáškových textech).
 - **Výběr kapitoly a obtížnosti** v postranním panelu.
 - **Matematická verifikace (SymPy):** model volá nástroje
   `compute` (derivace, integrály, limity, úpravy) a `verify_equivalence` (ověření výrazů).
+- **Grafy funkcí (Plotly):** u určitého integrálu se vykreslí plocha pod křivkou, obecně
+  libovolná funkce (s robustním ošetřením pólů a nedefinovaných bodů).
 - **RAG** nad přednáškami (ChromaDB + OpenAI embeddingy) se zobrazením použitých zdrojů.
 - **Vykreslování LaTeXu** a automatická normalizace oddělovačů.
 - **Automatický reset konverzace** při změně režimu/kapitoly/obtížnosti + tlačítko „Nová konverzace“.
@@ -67,6 +69,7 @@ Aplikace se otevře na <http://localhost:8501>.
 ```
 app.py                         # Streamlit UI + orchestrační vrstva (prompty, tool-loop, reset)
 src/math_core.py               # matematické jádro: compute() a verify_equivalence() (SymPy)
+src/plotting.py                # vykreslování grafů funkcí (Plotly/NumPy)
 src/rag.py                     # znalostní vrstva: RAG nad ChromaDB
 src/curriculum.py              # osnova kapitol
 src/build_index.py             # CLI pro sestavení vektorového indexu

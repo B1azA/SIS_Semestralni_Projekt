@@ -5,6 +5,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from openai import OpenAI
 from src.math_core import verify_equivalence, compute
+from src.plotting import render_plot
 from src.curriculum import CURRICULUM
 from src.rag import load_retriever, format_context
 
@@ -50,6 +51,8 @@ def normalize_latex(text: str) -> str:
     text = re.sub(r"\\begin\{(equation\*?|displaymath)\}", "$$", text)
     text = re.sub(r"\\end\{(equation\*?|displaymath)\}", "$$", text)
     text = re.sub(r"```(?:latex|math)\s*(.*?)```", r"$$\1$$", text, flags=re.S)
+    # odstraní prázdné/rozbité odkazy na obrázky, které model občas vloží
+    text = re.sub(r"!\[[^\]]*\]\(\s*(?:attachment|image|obrázek)[^)]*\)", "", text)
     return text
 
 # --- Inicializace stavu konverzace ---
@@ -59,12 +62,15 @@ if "tool_logs" not in st.session_state:
     st.session_state.tool_logs = {}
 if "sources" not in st.session_state:
     st.session_state.sources = {}
+if "figures" not in st.session_state:
+    st.session_state.figures = {}
 
 def reset_conversation():
-    """Vymaže historii chatu, protokoly ověření i použité zdroje."""
+    """Vymaže historii chatu, protokoly ověření, použité zdroje i grafy."""
     st.session_state.messages = []
     st.session_state.tool_logs = {}
     st.session_state.sources = {}
+    st.session_state.figures = {}
 
 # --- Postranní panel (ovládání režimů, kapitoly a obtížnosti) ---
 with st.sidebar:
@@ -82,7 +88,7 @@ with st.sidebar:
     )
 
     st.divider()
-    if st.button("🆕 Nová konverzace", use_container_width=True):
+    if st.button("🆕 Nová konverzace", width="stretch"):
         reset_conversation()
 
     st.divider()
@@ -148,10 +154,35 @@ tools = [
                 "required": ["expr", "operation"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "plot_function",
+            "description": (
+                "Vykreslí graf funkce jedné proměnné (Plotly). Použij, když je vhodné ukázat průběh "
+                "funkce – zejména u určitého integrálu vybarvi plochu pod křivkou (area_from, area_to)."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "expr": {"type": "string", "description": "Výraz v syntaxi SymPy (např. 'x**2', 'sin(x)', '1/x')"},
+                    "variable": {"type": "string", "description": "Proměnná, výchozí 'x'"},
+                    "x_min": {"type": "number", "description": "Levá mez intervalu vykreslení (výchozí -5)"},
+                    "x_max": {"type": "number", "description": "Pravá mez intervalu vykreslení (výchozí 5)"},
+                    "area_from": {"type": "number", "description": "Dolní mez pro vybarvení plochy (určitý integrál)"},
+                    "area_to": {"type": "number", "description": "Horní mez pro vybarvení plochy (určitý integrál)"},
+                    "y_min": {"type": "number", "description": "Dolní mez osy y (nepovinné)"},
+                    "y_max": {"type": "number", "description": "Horní mez osy y (nepovinné)"}
+                },
+                "required": ["expr"]
+            }
+        }
     }
 ]
 
-# Mapování názvů nástrojů na jejich lokální implementace
+# Mapování názvů nástrojů na jejich lokální implementace (plot_function se řeší zvlášť,
+# protože vrací i obrázek, který se má vykreslit v rozhraní)
 AVAILABLE_FUNCTIONS = {
     "verify_equivalence": verify_equivalence,
     "compute": compute,
@@ -177,6 +208,9 @@ def get_system_prompt(selected_mode: str, selected_chapter: str, selected_diffic
         "- Nikdy nepočítej zpaměti. Výsledky počítání získávej voláním nástroje `compute` "
         "(derivace, integrály, limity, úpravy) a správnost výrazů (např. odpovědi studenta) "
         "ověřuj nástrojem `verify_equivalence`.\n"
+        "- Když je užitečné ukázat průběh funkce, použij nástroj `plot_function`; u určitého "
+        "integrálu vykresli funkci a vybarvi plochu zadáním `area_from` a `area_to`. "
+        "Graf se zobrazí automaticky – nevkládej do odpovědi žádné obrázky ani odkazy typu `![...](attachment:...)`.\n"
         "- Pokud si u definice nebo věty nejsi jistý, přiznej to a nevymýšlej si.\n"
         f"- Pokud se dotaz týká jiné kapitoly než „{selected_chapter}“, krátce odpověz a nabídni přepnutí kapitoly.\n"
     )
@@ -240,6 +274,9 @@ for idx, msg in enumerate(st.session_state.messages):
             with st.expander("Ověření výpočtu (SymPy)"):
                 for log in st.session_state.tool_logs[idx]:
                     st.json(log)
+        if idx in st.session_state.figures:
+            for i, fig in enumerate(st.session_state.figures[idx]):
+                st.plotly_chart(fig, width="stretch", key=f"fig-hist-{idx}-{i}")
 
 # --- Zpracování nového dotazu ---
 if prompt := st.chat_input("Napiš dotaz k teorii, požádej o příklad nebo zadej své řešení..."):
@@ -266,6 +303,7 @@ if prompt := st.chat_input("Napiš dotaz k teorii, požádej o příklad nebo za
     with st.chat_message("assistant"):
         with st.spinner("Přemýšlím a ověřuji výpočty..."):
             verification_logs = []
+            figures = []
             MAX_TOOL_ROUNDS = 5  # ochrana proti zacyklení volání nástroje
 
             for _ in range(MAX_TOOL_ROUNDS):
@@ -285,11 +323,16 @@ if prompt := st.chat_input("Napiš dotaz k teorii, požádej o příklad nebo za
                 for tool_call in msg.tool_calls:
                     name = tool_call.function.name
                     args = json.loads(tool_call.function.arguments)
-                    func = AVAILABLE_FUNCTIONS.get(name)
-                    if func is None:
-                        res_dict = {"error": f"Neznámý nástroj '{name}'."}
+                    if name == "plot_function":
+                        fig, res_dict = render_plot(**args)
+                        if fig is not None:
+                            figures.append(fig)
                     else:
-                        res_dict = func(**args)
+                        func = AVAILABLE_FUNCTIONS.get(name)
+                        if func is None:
+                            res_dict = {"error": f"Neznámý nástroj '{name}'."}
+                        else:
+                            res_dict = func(**args)
                     verification_logs.append({"nastroj": name, "vstup": args, "vysledek_sympy": res_dict})
                     api_messages.append({
                         "role": "tool",
@@ -299,6 +342,8 @@ if prompt := st.chat_input("Napiš dotaz k teorii, požádej o příklad nebo za
 
             reply_text = msg.content or ""
             st.markdown(normalize_latex(reply_text))
+            for i, fig in enumerate(figures):
+                st.plotly_chart(fig, width="stretch", key=f"fig-cur-{i}")
             if passages:
                 with st.expander("Použité pasáže z přednášek (RAG)"):
                     for src in passages:
@@ -313,3 +358,5 @@ if prompt := st.chat_input("Napiš dotaz k teorii, požádej o příklad nebo za
         st.session_state.sources[len(st.session_state.messages) - 1] = passages
     if verification_logs:
         st.session_state.tool_logs[len(st.session_state.messages) - 1] = verification_logs
+    if figures:
+        st.session_state.figures[len(st.session_state.messages) - 1] = figures
