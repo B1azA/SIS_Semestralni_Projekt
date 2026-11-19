@@ -197,8 +197,15 @@ Obsahují:
 - **Režim Spolužák** – neformální, stručné vysvětlení derivace postavené na přirovnání
   (rychlost auta jako derivace vzdálenosti podle času).
 
-> **TODO:** doplnit výsledky testování s reálnými studenty (sběr zpětné vazby na
-> srozumitelnost a užitečnost odpovědí).
+### 3.4 Zpětná vazba od studentů
+Testování s reálnými studenty (průběžně doplňováno):
+
+**Václav Šícha:**
+> „Model plní svojí funkci. Umí celkem dobře vysvětlit učivo. Nepodařilo se mi ho rozbít.“
+
+Shrnutí: student potvrdil, že aplikace plní svůj účel a výklad látky je srozumitelný. Zároveň se
+mu nepodařilo najít vstup, na kterém by model selhal, což podporuje odolnost nastavených promptů
+a ověřování výpočtů přes SymPy.
 
 ---
 
