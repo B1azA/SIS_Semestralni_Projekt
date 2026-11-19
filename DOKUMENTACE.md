@@ -3,6 +3,10 @@
 Semestrální projekt SIS — varianta 2.
 Autor: Josef Blažek.
 
+- **Živá aplikace (deployment):** https://sissemestralniprojekt-8dgvdwadhjoz59f8ewu5km.streamlit.app/
+- **Ukázky reálných konverzací:** `docs/ukazky_konverzaci.md`
+- **Diagram architektury:** `docs/architektura.svg`
+
 ---
 
 ## 1. Úvodní část
@@ -178,6 +182,15 @@ Díky povinnému ověřování přes SymPy odpovědi u výpočtů odpovídají r
 RAG zajišťuje, že se terminologie a označení shodují s přednáškami FSI. Jako omezení se
 ukazuje kvalita extrakce z PDF (např. tabulky obsahu převzaté z převodu PDF).
 
+### 3.3 Ukázky reálných konverzací
+Kompletní přepisy (vygenerované reálným spuštěním aplikace) jsou v `docs/ukazky_konverzaci.md`.
+Obsahují:
+- **Režim Učitel** – strukturovaný výklad derivace složené funkce včetně definice, řešeného
+  příkladu a častých chyb.
+- **Režim Zkoušející** – zadání příkladu (s referenčním výsledkem z `compute`), reakci na
+  **chybné** řešení studenta (pojmenování typu chyby bez prozrazení výsledku) a ověření
+  **správného** řešení nástrojem `verify_equivalence`.
+
 > **TODO:** doplnit výsledky testování s reálnými studenty (sběr zpětné vazby na
 > srozumitelnost a užitečnost odpovědí).
 
@@ -250,5 +263,8 @@ src/Semestralni_projekt.ipynb  # notebook s pipeline zpracování dat
 data/*.md                      # zpracovaná znalostní báze
 data/db/                       # vektorová databáze (ChromaDB)
 docs/architektura.svg|.mmd     # diagram architektury
-pyproject.toml, uv.lock        # seznam závislostí
+docs/ukazky_konverzaci.md      # ukázky reálných konverzací
+DOKUMENTACE.md, README.md      # dokumentace a návod
+requirements.txt               # závislosti pro nasazení (pip)
+pyproject.toml                 # seznam závislostí (uv)
 ```
