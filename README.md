@@ -1,7 +1,8 @@
 # AI Tutor Matematické analýzy (FSI VUT)
 
 Specializovaný matematický chatbot pro výuku **Matematické analýzy I a II** na FSI VUT v Brně.
-Umí vysvětlovat teorii (režim **Učitel**) a generovat a vyhodnocovat příklady (režim **Zkoušející**).
+Umí vysvětlovat teorii (režim **Učitel**), generovat a vyhodnocovat příklady (režim **Zkoušející**)
+a látku vysvětlit i **neformálně a na přirovnáních** (režim **Spolužák**).
 Matematiku **nepočítá „z hlavy“** – výsledky získává z knihovny **SymPy** a odpovědi opírá o reálné
 přednášky pomocí **RAG** (vyhledávání v přednáškových textech).
 
@@ -12,8 +13,9 @@ přednášky pomocí **RAG** (vyhledávání v přednáškových textech).
 
 ## Klíčové funkce
 
-- **Dva režimy:** *Učitel* (trpělivý výklad krok za krokem, bez otázek) a *Zkoušející*
-  (zadá jeden příklad, čeká, neprozrazuje výsledek, dává stupňované nápovědy a určí typ chyby).
+- **Tři režimy:** *Učitel* (trpělivý výklad krok za krokem, bez otázek), *Zkoušející*
+  (zadá jeden příklad, čeká, neprozrazuje výsledek, dává stupňované nápovědy a určí typ chyby)
+  a *Spolužák* (neformální, stručné vysvětlení na přirovnáních).
 - **Výběr kapitoly a obtížnosti** v postranním panelu.
 - **Matematická verifikace (SymPy):** model volá nástroje
   `compute` (derivace, integrály, limity, úpravy) a `verify_equivalence` (ověření výrazů).
@@ -55,7 +57,7 @@ Aplikace se otevře na <http://localhost:8501>.
 
 ## Jak aplikaci ovládat
 
-1. V **postranním panelu** zvolte *Režim asistenta*, *Kapitolu* a *Obtížnost úloh*.
+1. V **postranním panelu** zvolte *Režim asistenta* (Učitel / Zkoušející / Spolužák), *Kapitolu* a *Obtížnost úloh*.
 2. V **chatu** napište dotaz na teorii, požádejte o příklad, nebo (ve zkoušejícím režimu) pošlete své řešení.
 3. Pod odpovědí rozbalte **„Použité pasáže z přednášek (RAG)“** a **„Ověření výpočtu (SymPy)“**.
 4. Tlačítkem **„Nová konverzace“** vyčistíte historii (čistí se i automaticky při změně nastavení).

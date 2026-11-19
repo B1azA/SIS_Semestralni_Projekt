@@ -14,8 +14,9 @@ Autor: Josef Blažek.
 ### 1.1 Cíl projektu
 Cílem projektu je navrhnout a zprovoznit specializovaného matematického chatbota
 („AI Tutora“) pro předměty Matematická analýza I a II na FSI VUT v Brně. Aplikace
-umožňuje studentovi **vysvětlovat teorii** (režim *Učitel*) a **procvičovat příklady**
-(režim *Zkoušející*). Klíčovým požadavkem je, aby systém **nepočítal zpaměti**, ale každý
+umožňuje studentovi **vysvětlovat teorii** (režim *Učitel*), **procvičovat příklady**
+(režim *Zkoušející*) a nechat si látku vysvětlit **neformálně a na přirovnáních** (režim
+*Spolužák*). Klíčovým požadavkem je, aby systém **nepočítal zpaměti**, ale každý
 výsledek ověřoval **deterministickým matematickým nástrojem** (SymPy), a aby se odpovědi
 opíraly o **reálné přednáškové texty** (RAG), nikoliv o „vymýšlení“ jazykového modelu.
 
@@ -140,6 +141,9 @@ Systémový prompt (`get_system_prompt`) se skládá ze společné části a č�
   nic k dopočítání.
 - **Režim Zkoušející**: zadá **jeden** příklad a čeká; ověřuje referenční výsledek i odpověď
   studenta; neprozrazuje řešení; určí **typ chyby** a dává stupňované nápovědy (1→2→3).
+- **Režim Spolužák**: v podstatě učitel, ale neformální a stručný („k věci“); vykládá látku
+  na **přirovnáních** z běžného života (derivace jako rychlost apod.). Také se **neptá** a
+  nezadává nic k počítání.
 
 Obtížnost (`Základní` / `Střední (cvičení)` / `Stačí umět všechno`) se přes mapu
 `DIFFICULTY_HINTS` promítá do náročnosti zadávaných úloh.
@@ -190,6 +194,8 @@ Obsahují:
 - **Režim Zkoušející** – zadání příkladu (s referenčním výsledkem z `compute`), reakci na
   **chybné** řešení studenta (pojmenování typu chyby bez prozrazení výsledku) a ověření
   **správného** řešení nástrojem `verify_equivalence`.
+- **Režim Spolužák** – neformální, stručné vysvětlení derivace postavené na přirovnání
+  (rychlost auta jako derivace vzdálenosti podle času).
 
 > **TODO:** doplnit výsledky testování s reálnými studenty (sběr zpětné vazby na
 > srozumitelnost a užitečnost odpovědí).
@@ -201,7 +207,7 @@ Obsahují:
 ### 4.1 Přínosy
 - Spojení LLM (srozumitelnost) s deterministickým ověřovačem (spolehlivost).
 - Odpovědi ukotvené v reálných přednáškách, se zobrazenými zdroji.
-- Dva pedagogické režimy a volitelná obtížnost.
+- Dva pedagogické režimy (Učitel, Zkoušející) a režim Spolužák s volitelnou obtížností.
 - Webové rozhraní dostupné odkudkoliv.
 
 ### 4.2 Omezení
@@ -243,7 +249,7 @@ uv run streamlit run app.py
 Aplikace se otevře na adrese <http://localhost:8501>.
 
 ### 5.3 Ovládání
-- **Postranní panel:** vyber *Režim asistenta* (Učitel / Zkoušející), *Kapitolu* a
+- **Postranní panel:** vyber *Režim asistenta* (Učitel / Zkoušející / Spolužák), *Kapitolu* a
   *Obtížnost úloh*.
 - **Chat:** napiš dotaz na teorii, požádej o příklad, nebo (ve zkoušejícím režimu) pošli
   své řešení.

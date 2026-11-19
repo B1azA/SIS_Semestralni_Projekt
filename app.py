@@ -71,7 +71,7 @@ with st.sidebar:
     st.header("Nastavení výuky")
     mode = st.radio(
         "Režim asistenta:",
-        ["Učitel (výklad teorie)", "Zkoušející (procvičování)"],
+        ["Učitel (výklad teorie)", "Zkoušející (procvičování)", "Spolužák (neformálně)"],
     )
 
     chapter = st.selectbox("Kapitola:", list(CURRICULUM.keys()))
@@ -180,6 +180,19 @@ def get_system_prompt(selected_mode: str, selected_chapter: str, selected_diffic
         "- Pokud si u definice nebo věty nejsi jistý, přiznej to a nevymýšlej si.\n"
         f"- Pokud se dotaz týká jiné kapitoly než „{selected_chapter}“, krátce odpověz a nabídni přepnutí kapitoly.\n"
     )
+    if "Spolužák" in selected_mode:
+        return base + (
+            "\nJsi v režimu SPOLUŽÁK. Vystupuj jako kamarád ze školy, ne jako učitel.\n"
+            "Pravidla:\n"
+            "- Mluv neformálně, přátelsky a hlavně krátce a k věci – žádné dlouhé omáčky.\n"
+            "- Vysvětluj látku jednoduše a ukazuj ji na přirovnáních z běžného života "
+            "(např. derivace jako rychlost, integrál jako hromadění, limita jako „blížíme se k“).\n"
+            "- Neptej se studenta na kontrolní otázky a nezadávej mu nic k počítání – "
+            "odpověz rovnou a stručně.\n"
+            "- Klidně použij občas hovorový obrat, ale matematiku a výsledky měj vždy správně "
+            "(ověř si je nástroji `compute`/`verify_equivalence`).\n"
+            "- Když je toho moc, vyber to nejdůležitější a zbytek nabídni, když se student zeptá."
+        )
     if "Učitel" in selected_mode:
         return base + (
             "\nJsi v režimu UČITEL. Cílem je studentovi látku vysvětlit.\n"

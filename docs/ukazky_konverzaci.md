@@ -108,3 +108,21 @@ Odpověď studenta byla ověřena nástrojem `verify_equivalence`:
   "difference": "0"
 }
 ```
+
+---
+
+## 3. Režim Spolužák — neformálně a na přirovnáních
+
+**Nastavení:** režim *Spolužák*, kapitola *3. Diferenciální počet funkce jedné proměnné*.
+
+**🧑‍🎓 Student:** Vysvětli mi, co je to derivace. Nějak jednoduše, jako bys byl můj spolužák.
+
+**🙂 Spolužák:**
+
+Jasně! Derivace je vlastně něco jako rychlost změny funkce v určitém bodě. Když si představíš, že máš křivku, tak derivace ti říká, jak strmá ta křivka je v daném bodě.
+
+Když třeba jedeš autem, tak rychlost, kterou jedeš, je derivace tvé vzdálenosti podle času. Pokud se vzdálenost mění rychle, máš vyšší rychlost, a když se nemění, tak zpomaluješ nebo stojíš.
+
+Matematicky to vyjadřujeme jako limitu, která ukazuje, co se děje, když se blížíme k tomuto bodu. Takže derivace vlastně ukazuje, jak moc se funkce "hýbe" při malých změnách kolem daného bodu. Super, že?
+
+> 📚 *Použité pasáže z přednášek (RAG):* ### 14 Derivace, ##### Pˇrehled vzorc˚u pro derivaci
