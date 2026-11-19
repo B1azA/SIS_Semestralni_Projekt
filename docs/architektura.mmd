@@ -1,0 +1,11 @@
+%% Diagram architektury systému (zdroj pro Mermaid / mermaid.live)
+flowchart TD
+    U["Student / uživatel"] --> UI["Streamlit UI (app.py)<br/>chat, volba režimu, kapitoly a obtížnosti"]
+    UI <--> ORCH["Orchestrační vrstva (app.py)<br/>systémový prompt, RAG retrieval, tool-loop, historie"]
+    ORCH -->|"dotaz + načtený kontext"| LLM["LLM – OpenAI GPT-4o-mini"]
+    LLM -->|"volání nástrojů (compute / verify_equivalence)"| MC["Matematické jádro<br/>src/math_core.py (SymPy)"]
+    MC -->|"výsledek ověření (JSON)"| LLM
+    ORCH -->|"vyhledání relevantních pasáží"| RAG["Znalostní vrstva<br/>src/rag.py"]
+    RAG <-->|"dotaz / nejpodobnější pasáže"| DB[("ChromaDB<br/>data/db, 539 pasáží")]
+    PDF["data/raw/*.pdf"] --> CONV["pymupdf4llm"] --> MD["data/*.md"] --> CHUNK["dělení na pasáže<br/>+ OpenAI embeddings"] --> DB
+    LLM -->|"odpověď (LaTeX)"| ORCH --> UI
