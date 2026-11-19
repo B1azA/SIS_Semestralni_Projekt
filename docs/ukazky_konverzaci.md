@@ -170,3 +170,5 @@ Podívejme se nyní na plochu pod křivkou $y = x^2$ mezi $0$ a $2$:
 > 📈 V aplikaci se pod odpovědí **vykreslí interaktivní graf** funkce $y=x^2$ s oranžově
 > vybarvenou plochou mezi $0$ a $2$ (nástroj `plot_function` s `area_from=0`, `area_to=2`).
 > Nástroj zároveň spočítal plochu ≈ **2,6667** (= 8/3), což odpovídá výsledku.
+> Do stejného grafu lze zadat **víc funkcí najednou** (seznam `exprs`) a osy $x=0$, $y=0$ jsou
+> vždy zvýrazněné tečkovaně.

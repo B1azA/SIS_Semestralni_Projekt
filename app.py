@@ -160,22 +160,28 @@ tools = [
         "function": {
             "name": "plot_function",
             "description": (
-                "Vykreslí graf funkce jedné proměnné (Plotly). Použij, když je vhodné ukázat průběh "
-                "funkce – zejména u určitého integrálu vybarvi plochu pod křivkou (area_from, area_to)."
+                "Vykreslí graf jedné nebo více funkcí jedné proměnné (Plotly) do jednoho grafu. "
+                "Použij pro srovnání více funkcí (např. ['x**2', '2*x']) a zejména u určitého integrálu "
+                "vybarvi plochu pod křivkou (area_from, area_to). Osy x=0 a y=0 se zvýrazní automaticky."
             ),
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "expr": {"type": "string", "description": "Výraz v syntaxi SymPy (např. 'x**2', 'sin(x)', '1/x')"},
+                    "exprs": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Seznam výrazů v syntaxi SymPy, např. ['x**2', 'sin(x)']. Jedna funkce se zadá jako seznam s jedním prvkem."
+                    },
                     "variable": {"type": "string", "description": "Proměnná, výchozí 'x'"},
                     "x_min": {"type": "number", "description": "Levá mez intervalu vykreslení (výchozí -5)"},
                     "x_max": {"type": "number", "description": "Pravá mez intervalu vykreslení (výchozí 5)"},
                     "area_from": {"type": "number", "description": "Dolní mez pro vybarvení plochy (určitý integrál)"},
                     "area_to": {"type": "number", "description": "Horní mez pro vybarvení plochy (určitý integrál)"},
+                    "area_index": {"type": "integer", "description": "Index křivky v 'exprs', pod kterou se plocha vybarví (výchozí 0)."},
                     "y_min": {"type": "number", "description": "Dolní mez osy y (nepovinné)"},
                     "y_max": {"type": "number", "description": "Horní mez osy y (nepovinné)"}
                 },
-                "required": ["expr"]
+                "required": ["exprs"]
             }
         }
     }
@@ -208,9 +214,10 @@ def get_system_prompt(selected_mode: str, selected_chapter: str, selected_diffic
         "- Nikdy nepočítej zpaměti. Výsledky počítání získávej voláním nástroje `compute` "
         "(derivace, integrály, limity, úpravy) a správnost výrazů (např. odpovědi studenta) "
         "ověřuj nástrojem `verify_equivalence`.\n"
-        "- Když je užitečné ukázat průběh funkce, použij nástroj `plot_function`; u určitého "
-        "integrálu vykresli funkci a vybarvi plochu zadáním `area_from` a `area_to`. "
-        "Graf se zobrazí automaticky – nevkládej do odpovědi žádné obrázky ani odkazy typu `![...](attachment:...)`.\n"
+        "- Když je užitečné ukázat průběh funkce, použij nástroj `plot_function`; můžeš vykreslit "
+        "i více funkcí najednou (seznam `exprs`, např. pro srovnání). U určitého integrálu vykresli "
+        "funkci a vybarvi plochu zadáním `area_from` a `area_to`. Osy x=0 a y=0 se zvýrazní automaticky. "
+        "Graf se zobrazí sám – nevkládej do odpovědi žádné obrázky ani odkazy typu `![...](attachment:...)`.\n"
         "- Pokud si u definice nebo věty nejsi jistý, přiznej to a nevymýšlej si.\n"
         f"- Pokud se dotaz týká jiné kapitoly než „{selected_chapter}“, krátce odpověz a nabídni přepnutí kapitoly.\n"
     )

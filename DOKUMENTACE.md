@@ -112,8 +112,9 @@ Model má k dispozici **tři nástroje**:
   k vyhodnocení odpovědi studenta.
 - `compute(expr, operation, variable, point)` (`src/math_core.py`) – **přímo spočítá** výsledek:
   derivaci (i druhou), integrál, limitu, zjednodušení, rozvinutí, faktorizaci nebo řešení rovnice.
-- `plot_function(expr, variable, x_min, x_max, area_from, area_to)` (`src/plotting.py`) – vykreslí
-  **graf funkce** (Plotly) a u určitého integrálu **vybarví plochu pod křivkou**.
+- `plot_function(exprs, variable, x_min, x_max, area_from, area_to, area_index)` (`src/plotting.py`)
+  – vykreslí **jednu i více funkcí do jednoho grafu** (Plotly), u určitého integrálu **vybarví
+  plochu pod křivkou** (křivku určí `area_index`) a vždy **zvýrazní osy x = 0 a y = 0**.
 
 Modul `src/plotting.py` je navržen robustně i pro „bláznivé“ funkce: husté vzorkování přes
 `lambdify`, **percentilový rozsah osy y** (pól neroztáhne měřítko), **přerušení křivky** v místech

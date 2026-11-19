@@ -19,8 +19,8 @@ přednášky pomocí **RAG** (vyhledávání v přednáškových textech).
 - **Výběr kapitoly a obtížnosti** v postranním panelu.
 - **Matematická verifikace (SymPy):** model volá nástroje
   `compute` (derivace, integrály, limity, úpravy) a `verify_equivalence` (ověření výrazů).
-- **Grafy funkcí (Plotly):** u určitého integrálu se vykreslí plocha pod křivkou, obecně
-  libovolná funkce (s robustním ošetřením pólů a nedefinovaných bodů).
+- **Grafy funkcí (Plotly):** jedna i více funkcí v jednom grafu, zvýrazněné osy x=0 a y=0,
+  u určitého integrálu vybarvená plocha pod křivkou (s robustním ošetřením pólů a nedefinovaných bodů).
 - **RAG** nad přednáškami (ChromaDB + OpenAI embeddingy) se zobrazením použitých zdrojů.
 - **Vykreslování LaTeXu** a automatická normalizace oddělovačů.
 - **Automatický reset konverzace** při změně režimu/kapitoly/obtížnosti + tlačítko „Nová konverzace“.
