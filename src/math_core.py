@@ -9,6 +9,7 @@ ale výsledky dostává z klasické symbolické matematiky:
 """
 
 import sympy as sp
+import math
 
 
 def verify_equivalence(student_expr: str, expected_expr: str, variable: str = "x") -> dict:
@@ -106,6 +107,16 @@ def compute(expr: str, operation: str, variable: str = "x", point=None,
             latex = sp.latex(res)
         except Exception:
             latex = str(res)
-        return {"result": str(res), "latex": latex, "operation": op}
+        out = {"result": str(res), "latex": latex, "operation": op}
+        # U číselného výsledku (určitý integrál, limita, číselné řešení…) přidáme
+        # i přibližnou hodnotu, aby ji model studentovi rovnou uvedl.
+        if isinstance(res, sp.Basic) and not res.free_symbols:
+            try:
+                numeric = float(sp.N(res))
+                if math.isfinite(numeric):
+                    out["numeric"] = round(numeric, 6)
+            except Exception:
+                pass
+        return out
     except Exception as e:
         return {"result": None, "error": str(e)}

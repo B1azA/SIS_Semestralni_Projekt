@@ -113,7 +113,8 @@ Model má k dispozici **tři nástroje**:
 - `compute(expr, operation, variable, point, lower, upper)` (`src/math_core.py`) – **přímo spočítá**
   výsledek: derivaci (i druhou), integrál, limitu, zjednodušení, rozvinutí, faktorizaci nebo
   řešení rovnice. U `integrate` bez `lower`/`upper` vrací **neurčitý** integrál (primitivní funkci),
-  s oběma mezemi **určitý** integrál.
+  s oběma mezemi **určitý** integrál. K číselnému výsledku navíc přidává **přibližnou hodnotu**
+  (položka `numeric`), kterou model uvede studentovi.
 - `plot_function(exprs, variable, x_min, x_max, area_from, area_to, area_index)` (`src/plotting.py`)
   – vykreslí **jednu i více funkcí do jednoho grafu** (Plotly), u určitého integrálu **vybarví
   plochu pod křivkou** (křivku určí `area_index`) a vždy **zvýrazní osy x = 0 a y = 0**.

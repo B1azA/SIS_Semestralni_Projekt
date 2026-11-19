@@ -219,6 +219,8 @@ def get_system_prompt(selected_mode: str, selected_chapter: str, selected_diffic
         "- Nikdy nepočítej zpaměti. Výsledky počítání získávej voláním nástroje `compute` "
         "(derivace, integrály, limity, úpravy) a správnost výrazů (např. odpovědi studenta) "
         "ověřuj nástrojem `verify_equivalence`.\n"
+        "- U určitého integrálu (a obecně u číselného výsledku) uváděj kromě přesného tvaru "
+        "i přibližnou číselnou hodnotu (najdeš ji v položce `numeric`).\n"
         "- Když je užitečné ukázat průběh funkce, použij nástroj `plot_function`; můžeš vykreslit "
         "i více funkcí najednou (seznam `exprs`, např. pro srovnání). U určitého integrálu vykresli "
         "funkci a vybarvi plochu zadáním `area_from` a `area_to`. Osy x=0 a y=0 se zvýrazní automaticky. "
