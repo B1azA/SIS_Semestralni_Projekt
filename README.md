@@ -23,9 +23,9 @@ přednášky pomocí **RAG** (vyhledávání v přednáškových textech).
 
 ## Spuštění lokálně
 
-Potřebuješ **Python** (vyvíjeno na 3.14, funguje od 3.11) a **API klíč k OpenAI**.
+Potřebujete **Python** (vyvíjeno na 3.14, funguje od 3.11) a **API klíč k OpenAI**.
 
-Nejprve vytvoř soubor `.env` v kořeni projektu s klíčem:
+Nejprve vytvořte soubor `.env` v kořeni projektu s klíčem:
 
 ```bash
 OPENAI_API_KEY="sk-..."
@@ -50,15 +50,15 @@ streamlit run app.py
 Aplikace se otevře na <http://localhost:8501>.
 
 > **Znalostní báze (RAG)** je součástí repa (`data/db`), takže se nic sestavovat nemusí.
-> Pokud bys ji chtěl přegenerovat z přednášek (`data/*.md`), spusť:
+> Pokud byste ji chtěli přegenerovat z přednášek (`data/*.md`), spusťte:
 > `uv run python -m src.build_index` (resp. `python -m src.build_index`).
 
 ## Jak aplikaci ovládat
 
-1. V **postranním panelu** zvol *Režim asistenta*, *Kapitolu* a *Obtížnost úloh*.
-2. V **chatu** napiš dotaz na teorii, požádej o příklad, nebo (ve zkoušejícím režimu) pošli své řešení.
-3. Pod odpovědí rozbal **„Použité pasáže z přednášek (RAG)“** a **„Ověření výpočtu (SymPy)“**.
-4. Tlačítkem **„Nová konverzace“** vyčistíš historii (čistí se i automaticky při změně nastavení).
+1. V **postranním panelu** zvolte *Režim asistenta*, *Kapitolu* a *Obtížnost úloh*.
+2. V **chatu** napište dotaz na teorii, požádejte o příklad, nebo (ve zkoušejícím režimu) pošlete své řešení.
+3. Pod odpovědí rozbalte **„Použité pasáže z přednášek (RAG)“** a **„Ověření výpočtu (SymPy)“**.
+4. Tlačítkem **„Nová konverzace“** vyčistíte historii (čistí se i automaticky při změně nastavení).
 
 ## Struktura projektu
 
@@ -80,7 +80,7 @@ requirements.txt / pyproject.toml, uv.lock  # seznam závislostí
 ## Nasazení (Streamlit Community Cloud)
 
 Aplikace běží na [share.streamlit.io](https://share.streamlit.io) (repo `B1azA/SIS_Semestralni_Projekt`,
-main file `app.py`, klíč v *Secrets* jako `OPENAI_API_KEY`). Autoři nasazení: viz [DOKUMENTACE.md](DOKUMENTACE.md).
+main file `app.py`, klíč v *Secrets* jako `OPENAI_API_KEY`). Podrobnosti o nasazení viz [DOKUMENTACE.md](DOKUMENTACE.md).
 
 ---
 
