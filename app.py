@@ -1,5 +1,6 @@
 import os
 import json
+import re
 import streamlit as st
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -30,6 +31,26 @@ def get_retriever():
 
 client = get_openai_client()
 retriever = get_retriever()
+
+
+def normalize_latex(text: str) -> str:
+    """Sjednotí oddělovače matematiky na ty, které Streamlit umí vykreslit.
+
+    Streamlit (KaTeX) zobrazí matematiku jen pro ``$...$`` a ``$$...$$``.
+    Model ale občas vrátí ``\\(...\\)`` nebo ``\\[...\\]``, případně matematiku
+    v ``\\begin{equation}...`` nebo v ```` ```latex ```` bloku – to by se zobrazilo
+    jako holý text. Tato funkce to převede na očekávané oddělovače.
+    """
+    if not text:
+        return text
+    text = re.sub(r"(?<!\\)\\\(", "$", text)
+    text = re.sub(r"(?<!\\)\\\)", "$", text)
+    text = re.sub(r"(?<!\\)\\\[", "$$", text)
+    text = re.sub(r"(?<!\\)\\\]", "$$", text)
+    text = re.sub(r"\\begin\{(equation\*?|displaymath)\}", "$$", text)
+    text = re.sub(r"\\end\{(equation\*?|displaymath)\}", "$$", text)
+    text = re.sub(r"```(?:latex|math)\s*(.*?)```", r"$$\1$$", text, flags=re.S)
+    return text
 
 # --- Inicializace stavu konverzace ---
 if "messages" not in st.session_state:
@@ -151,7 +172,8 @@ def get_system_prompt(selected_mode: str, selected_chapter: str, selected_diffic
         f"{DIFFICULTY_HINTS.get(selected_difficulty, '')}\n\n"
         "Obecná pravidla:\n"
         "- Odpovídej vždy česky, odborně, ale srozumitelně.\n"
-        "- Matematiku zapisuj v LaTeXu: $...$ pro řádkové vzorce a $$...$$ pro samostatné bloky.\n"
+        "- Matematiku zapisuj POUZE pomocí $...$ (řádkově) a $$...$$ (samostatné bloky). "
+        "Nikdy nepoužívej \\( \\) ani \\[ \\] a nevkládej vzorce do \\begin{equation}.\n"
         "- Nikdy nepočítej zpaměti. Výsledky počítání získávej voláním nástroje `compute` "
         "(derivace, integrály, limity, úpravy) a správnost výrazů (např. odpovědi studenta) "
         "ověřuj nástrojem `verify_equivalence`.\n"
@@ -195,7 +217,7 @@ def get_system_prompt(selected_mode: str, selected_chapter: str, selected_diffic
 # Vykreslení historie zpráv
 for idx, msg in enumerate(st.session_state.messages):
     with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+        st.markdown(normalize_latex(msg["content"]))
         if idx in st.session_state.sources:
             with st.expander("Použité pasáže z přednášek (RAG)"):
                 for src in st.session_state.sources[idx]:
@@ -210,7 +232,7 @@ for idx, msg in enumerate(st.session_state.messages):
 if prompt := st.chat_input("Napiš dotaz k teorii, požádej o příklad nebo zadej své řešení..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
-        st.markdown(prompt)
+        st.markdown(normalize_latex(prompt))
 
     # RAG: vyhledá relevantní pasáže z přednášek
     passages = retriever.retrieve(prompt, k=4) if retriever else []
@@ -263,7 +285,7 @@ if prompt := st.chat_input("Napiš dotaz k teorii, požádej o příklad nebo za
                     })
 
             reply_text = msg.content or ""
-            st.markdown(reply_text)
+            st.markdown(normalize_latex(reply_text))
             if passages:
                 with st.expander("Použité pasáže z přednášek (RAG)"):
                     for src in passages:
