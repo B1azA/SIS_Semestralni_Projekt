@@ -226,9 +226,16 @@ Testování s reálnými studenty (průběžně doplňováno):
 **Štěpán Rada:**
 > „Velice hezké a užitečné, sám bych to využíval na denní bázi.“
 
-Shrnutí: oba studenti hodnotili aplikaci kladně. Václav potvrdil funkčnost i srozumitelnost výkladu
-a nepodařilo se mu najít vstup, na kterém by model selhal; Štěpán ocenil užitečnost aplikace
-natolik, že by ji používal pravidelně.
+**Martin Váša:**
+> „Dalo by se ještě zapracovat na 3D grafů a plochy mezi netriviálními funkcemi, jinak odpovědi jsou
+> stručné a efektivní. Přidal bych ještě agenty s osobností v roli spolužáka (aby si každý mohl vybrat
+> neformálního učitele jaký mu vyhovuje).“
+
+Shrnutí: všichni tři studenti hodnotili aplikaci kladně. Václav potvrdil funkčnost i srozumitelnost
+výkladu a nepodařilo se mu najít vstup, na kterém by model selhal; Štěpán ocenil užitečnost natolik,
+že by ji používal pravidelně; Martin označil odpovědi za **stručné a efektivní** a navrhl směry rozvoje
+(viz 4.3) – vykreslování 3D grafů, složitější vizualizace (plocha mezi funkcemi) a volitelné osobnosti
+asistenta (více „spolužáckých“ person).
 
 ---
 
@@ -249,6 +256,9 @@ natolik, že by ji používal pravidelně.
 - Složitější důkazy nelze plně „ověřit“ výpočtem.
 
 ### 4.3 Další rozvoj
+- **Vykreslování 3D grafů** (funkce dvou proměnných) a **složitější vizualizace** – např. plocha
+  mezi dvěma funkcemi, objemy rotačních těles apod. (námět z uživatelské zpětné vazby).
+- Volitelné osobnosti asistenta – více „spolužáckých“ person, aby si každý vybral styl, který mu sedí.
 - Rozšíření nástrojů o numerické metody (SciPy/NumPy), řešení soustav rovnic a grafy funkcí.
 - Nahrávání vlastních materiálů studenty a filtrování RAG podle kapitoly.
 - Perzistence relací, hodnocení pokroku studenta, analytika.
