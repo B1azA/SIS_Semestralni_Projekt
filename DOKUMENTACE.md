@@ -196,6 +196,8 @@ Byla provedena následující ověření (příklady z reálného běhu):
   změně kapitoly, režimu i obtížnosti.
 - **Kompletní konverzace.** Dotaz na derivaci složené funkce vrátil odpověď v LaTeXu, která
   vycházela z načtených pasáží, s dohledatelnými zdroji.
+- **Vykreslování grafu.** Funkce s póly $\sin(\tan(x)\cdot x-\cos(x))$ se i s vybarvenou plochou
+  na intervalu ⟨−0,5; 0,5⟩ vykreslila čitelně (viz `docs/ukazky_konverzaci.md`, sekce 5).
 
 ### 3.2 Vyhodnocení správnosti a srozumitelnosti
 Díky povinnému ověřování přes SymPy odpovědi u výpočtů odpovídají referenčnímu výsledku;

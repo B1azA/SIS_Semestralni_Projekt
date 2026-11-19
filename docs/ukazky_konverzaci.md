@@ -172,3 +172,17 @@ Podívejme se nyní na plochu pod křivkou $y = x^2$ mezi $0$ a $2$:
 > Nástroj zároveň spočítal plochu ≈ **2,6667** (= 8/3), což odpovídá výsledku.
 > Do stejného grafu lze zadat **víc funkcí najednou** (seznam `exprs`) a osy $x=0$, $y=0$ jsou
 > vždy zvýrazněné tečkovaně.
+
+---
+
+## 5. Ukázka vygenerovaného grafu (náročná funkce s póly)
+
+**🧑‍🎓 Student:** Vykresli mi graf funkce `sin(tan(x)*x-cos(x))`. Zvýrazni na tomto grafu plochu
+pod křivkou na intervalu −0,5 až 0,5.
+
+![Graf funkce sin(tan(x)·x − cos(x)) s vybarvenou plochou na intervalu ⟨−0,5; 0,5⟩](ukazky_graf_sin_tan.png)
+
+Ukázka názorně předvádí **robustní vykreslování**: funkce obsahuje `tan(x)`, který má póly, takže
+se křivka v těchto místech prudce rozkmitá – přesto graf zůstává čitelný (místo roztažení osy y
+na obrovské hodnoty se použije robustní rozsah a křivka se v místech skoků přeruší). Oranžově je
+vybarvená **plocha pod křivkou** na intervalu ⟨−0,5; 0,5⟩ a osy $x=0$, $y=0$ jsou zvýrazněné.

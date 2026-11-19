@@ -78,6 +78,7 @@ data/*.md                      # zpracovaná znalostní báze z přednášek
 data/db/                       # vektorová databáze (ChromaDB, součást repa)
 docs/architektura.svg|.mmd     # diagram architektury
 docs/ukazky_konverzaci.md      # ukázky reálných konverzací
+docs/ukazky_graf_sin_tan.png   # vygenerovaný graf (ukázka)
 DOKUMENTACE.md                 # kompletní dokumentace projektu
 requirements.txt / pyproject.toml, uv.lock  # seznam závislostí
 ```
