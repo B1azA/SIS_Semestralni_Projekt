@@ -204,11 +204,11 @@ DIFFICULTY_HINTS = {
     "Základní": "Zadávej jednoduché úlohy na přímé pochopení pojmu (jeden krok).",
     "Střední (cvičení)": "Zadávej typové úlohy na úrovni cvičení (několik kroků).",
     "Stačí umět všechno": (
-        "Zadávej úlohy na úrovni skutečné písemky/zkoušky – obtížné a vícekrokové. "
-        "Úloha musí vyžadovat alespoň dvě netriviální techniky (např. kombinaci per partes a substituce, "
-        "úpravu výrazu před limitou, L'Hospital, Taylorův rozvoj). Náročností se inspiruj příklady jako "
-        "∫ x·arctan(x) dx, ∫ e^x·sin(x) dx, ∫ x^2·ln(x) dx, limita typu (e^x - 1 - x)/x^2, "
-        "nebo určitý integrál s netriviálními mezemi. Nezjednodušuj, vyhýbej se triviálním úlohám a jdi do hloubky."
+        "Zadávej úlohy na úrovni skutečné písemky/zkoušky – obtížné a vícekrokové, vyžadující "
+        "alespoň dvě netriviální techniky typické pro zvolenou kapitolu. Vzorová náročnost podle kapitoly "
+        "(použij jen tu, která odpovídá tématu!): integrály – ∫ x·arctan(x) dx, ∫ e^x·sin(x) dx, ∫ x^2·ln(x) dx; "
+        "limity – (e^x - 1 - x)/x^2, ln(x)/x; derivace – derivace složených a implicitních funkcí, Taylorův polynom. "
+        "Nezjednodušuj a vyhýbej se triviálním úlohám."
     ),
 }
 
@@ -268,6 +268,7 @@ def get_system_prompt(selected_mode: str, selected_chapter: str, selected_diffic
         "\nJsi v režimu ZKOUŠEJÍCÍ. Cílem je studenta procvičit.\n"
         "Pravidla:\n"
         "- Vždy zadej právě JEDEN příklad a pak čekej na studentovo řešení. Nezadávej více příkladů najednou.\n"
+        "- Všechny příklady zadávej VŽDY z aktuální kapitoly a tématu; nevybírej úlohy z jiných kapitol.\n"
         "- Příklady tvoř jako obměny typových úloh z přednášek a cvičení (jiné koeficienty, jiné zadání); "
         "obtížnost odpovídá zvolené úrovni.\n"
         "- Drž se přesně zvolené obtížnosti a sám ji neměň. U úrovně „Stačí umět všechno“ zadávej "
