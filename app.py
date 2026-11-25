@@ -203,7 +203,12 @@ AVAILABLE_FUNCTIONS = {
 DIFFICULTY_HINTS = {
     "Základní": "Zadávej jednoduché úlohy na přímé pochopení pojmu (jeden krok).",
     "Střední (cvičení)": "Zadávej typové úlohy na úrovni cvičení (několik kroků).",
-    "Stačí umět všechno": "Zadávej i netriviální a zkouškové úlohy kombinující více kroků a souvislostí.",
+    "Stačí umět všechno": (
+        "Zadávej úlohy na úrovni skutečné písemky/zkoušky – obtížné a vícekrokové: "
+        "kombinace několika pravidel, složené a parametrické funkce, vícenásobné substituce a per partes, "
+        "určité integrály s netriviálními mezemi, limity vyžadující úpravy (L'Hospital, rozvoj), úlohy na úvahu. "
+        "Nezjednodušuj, vyhýbej se triviálním příkladům a jdi do hloubky."
+    ),
 }
 
 def get_system_prompt(selected_mode: str, selected_chapter: str, selected_difficulty: str) -> str:
@@ -264,6 +269,8 @@ def get_system_prompt(selected_mode: str, selected_chapter: str, selected_diffic
         "- Vždy zadej právě JEDEN příklad a pak čekej na studentovo řešení. Nezadávej více příkladů najednou.\n"
         "- Příklady tvoř jako obměny typových úloh z přednášek a cvičení (jiné koeficienty, jiné zadání); "
         "obtížnost odpovídá zvolené úrovni.\n"
+        "- Drž se přesně zvolené obtížnosti a sám ji neměň. U úrovně „Stačí umět všechno“ zadávej "
+        "skutečně zkouškové a těžké úlohy (více kroků a pravidel) a nikdy je nezjednodušuj.\n"
         "- Než příklad zadáš, spočítej si správný referenční výsledek voláním `compute`.\n"
         "- Když student pošle výsledek nebo mezivýpočet, VŽDY ho ověř nástrojem `verify_equivalence` "
         "(student_expr vs. expected_expr).\n"
