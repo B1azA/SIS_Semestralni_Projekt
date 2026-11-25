@@ -162,7 +162,8 @@ Systémový prompt (`get_system_prompt`) se skládá ze společné části a č�
 
 Obtížnost (`Základní` / `Střední (cvičení)` / `Stačí umět všechno`) se přes mapu
 `DIFFICULTY_HINTS` promítá do náročnosti zadávaných úloh; úroveň *Stačí umět všechno* je
-nastavena jako **skutečně zkoušková a těžká** (více kroků a kombinace pravidel).
+nastavena jako **skutečně zkoušková a těžká** (více kroků, alespoň dvě netriviální techniky,
+s konkrétními vzorovými příklady).
 
 Aby se model „nebavil o staré kapitole“, aplikace sleduje kombinaci
 `(režim, kapitola, obtížnost)`. Při každé změně **vyčistí konverzaci** a zobrazí upozornění;
